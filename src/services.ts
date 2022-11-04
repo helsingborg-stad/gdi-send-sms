@@ -1,9 +1,12 @@
-import { createAuthorizationServiceFromEnv } from '@helsingborg-stad/gdi-api-node/services/authorization-service'
+import { createSmsContentServiceFromEnv } from './services/sms-content-service'
+import { createSmsListenerServiceFromEnv } from './services/sms-listener-service'
+import { createSmsSendServiceFromEnv } from './services/sms-send-service'
 import { Services } from './types'
 
-
 const createServicesFromEnv = (): Services => ({
-	authorization: createAuthorizationServiceFromEnv(),
+	smsListenerService: createSmsListenerServiceFromEnv(),
+	smsContentService: createSmsContentServiceFromEnv(),
+	smsSendService: createSmsSendServiceFromEnv(),
 })
 
 export { createServicesFromEnv }

@@ -1,13 +1,12 @@
-import { createApp } from './create-app'
 import { createServicesFromEnv } from './services'
 import { Services } from './types'
-
 const services: Services = createServicesFromEnv()
 
-/** Main entry point that start and runs web server */
-createApp({
-	services,
-	validateResponse: false,
+/** Start daemon */
+services.smsListenerService.listen(async message => await services.smsSendService.send({
+	to: message.number, 
+	content: await services.smsContentService.build(message),
+})).catch(err => {
+	console.error(err)
+	process.exit(1)
 })
-	.start(process.env.PORT || 3000)
-  

@@ -13,6 +13,7 @@
   "dependencies": {
     "@helsingborg-stad/gdi-api-node": "^1.0.3",
     "@koa/cors": "^3.4.1",
+    "amqplib": "^0.10.3",
     "debug": "^4.3.4",
     "dotenv": "^16.0.2",
     "graphql": "^16.6.0",
@@ -29,6 +30,7 @@
     "superagent": "^8.0.0"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.8.2",
     "@types/jest": "^29.0.3",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/koa-bodyparser": "^4.3.8",
