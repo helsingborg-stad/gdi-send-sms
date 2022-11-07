@@ -1,5 +1,5 @@
 
-import { MqMessageBody, SmsListenerService, MqMessageEnvelope, MqEngine } from '../types'
+import { SmsListenerService, MqMessageEnvelope, MqEngine } from '../types'
 import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { AmqpEngine } from '../helpers/amqp-engine'
 
@@ -15,47 +15,26 @@ const createSmsListenerService = (uri: string, exchange: string, queue: string, 
 	listen: async (handler) => {
 		// Connection setup (Assign graceful close on Ctrl+C)
 		console.debug(`Connecting to ${uri}...`)
-		try {
-			await engine.connect(uri)
-			process.once('SIGINT', async () => {
-				await engine.close()
-			})	
-		} catch (error) {
-			throw Error(`Unrecoverable error while connecting (${error})`)
-		}
+		await engine.connect(uri)
+		process.once('SIGINT', async () => {
+			await engine.close()
+		})
+
 		// Channel creation
 		console.debug('Creating channel...')
-		try {
-			await engine.createChannel()
-		} catch (error) {
-			throw Error(`Unrecoverable error while creating channel (${error})`)
-		}
+		await engine.createChannel()
 
 		// Exchange creation/verification
 		console.debug(`Asserting durable topic exchange (${exchange}) ...`)
-		try {
-			await engine.assertExchange(exchange)
-		} catch(error) {
-			throw Error(`Unrecoverable error while asserting exchange (${error})`)
-		}
+		await engine.assertExchange(exchange)
 
 		// Queue creation/verification
 		console.log(`Asserting durable queue (${queue})...`)
-		try {
-			await engine.assertQueue(queue)
-		}
-		catch(error) {
-			throw Error(`Unrecoverable error while asserting durable queue (${error})`)
-		}
+		await engine.assertQueue(queue)
 
 		// Queue binding
 		console.log('Binding queue...')
-		try {
-			await engine.bindQueue(queue, exchange, filter)
-		}
-		catch(error) {
-			throw Error(`Unrecoverable error while binding to queue (${queue}) (${error})`)
-		}
+		await engine.bindQueue(queue, exchange, filter)
 		
 		console.log('waiting for messages. Ctrl-C to exit...')	
 

@@ -3034,11 +3034,6 @@ minimist@^1.2.5:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
-mock-amqplib@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/mock-amqplib/-/mock-amqplib-1.8.1.tgz#9c6f4e65b2416775dc81b9edd08f1d388e703ba0"
-  integrity sha512-O+kiyQUBEgrSPAmtWuvFaSn7ODNMSrMcr+WcITKHALJcVMa5r1K0Ek7tnGEu8JgS1VuT5gDzPS9QhLY/grVzhQ==
-
 mock-json-schema@^1.0.7:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/mock-json-schema/-/mock-json-schema-1.1.1.tgz#35cf35ae16e519986ff83c22b4a886a8fe5b9ba5"

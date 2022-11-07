@@ -10,7 +10,7 @@ it('should throw on an unrecoverable connection issue', async () => {
 	const engine: MqEngine = ({
 		connect: async () => { throw Error('Connect') },
 	})
-	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('Unrecoverable error while connecting (Error: Connect)')
+	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('Connect')
 })
 
 it('should throw on an unrecoverable channel creation issue', async () => {
@@ -18,7 +18,7 @@ it('should throw on an unrecoverable channel creation issue', async () => {
 		connect: async () => Promise.resolve(),
 		createChannel: async () => { throw Error('CreateChannel')},
 	})
-	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('Unrecoverable error while creating channel (Error: CreateChannel)')
+	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('CreateChannel')
 })
 
 it('should throw on an unrecoverable assert exchange issue', async () => {
@@ -27,7 +27,7 @@ it('should throw on an unrecoverable assert exchange issue', async () => {
 		createChannel: async () => Promise.resolve(),
 		assertExchange: async ()  => { throw Error('AssertExchange')},
 	})
-	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('Unrecoverable error while asserting exchange (Error: AssertExchange)')
+	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('AssertExchange')
 })
 
 it('should throw on an unrecoverable assert queue issue', async () => {
@@ -37,7 +37,7 @@ it('should throw on an unrecoverable assert queue issue', async () => {
 		assertExchange: async ()  => Promise.resolve(),
 		assertQueue: async () => { throw Error('AssertQueue') },
 	})
-	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('Unrecoverable error while asserting durable queue (Error: AssertQueue)')
+	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('AssertQueue')
 })
 
 it('should throw on an unrecoverable bind queue issue', async () => {
@@ -48,7 +48,7 @@ it('should throw on an unrecoverable bind queue issue', async () => {
 		assertQueue: async () => Promise.resolve(),
 		bindQueue: async () => { throw Error('BindQueue') },
 	})
-	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('Unrecoverable error while binding to queue (<queue>) (Error: BindQueue)')
+	await expect(createSmsListenerService('<host>', '<exchange>', '<queue>', '<filter>', engine, false).listen(emptyHandler)).rejects.toThrowError('BindQueue')
 })
 
 describe('should call ack after successful send', () => {
