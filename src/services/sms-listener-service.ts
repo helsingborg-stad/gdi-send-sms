@@ -1,14 +1,14 @@
 
 import { SmsListenerService, MqMessageEnvelope, MqEngine } from '../types'
 import { getEnv } from '@helsingborg-stad/gdi-api-node'
-import { AmqpEngine } from '../helpers/amqp-engine'
+import { createAmqpEngine } from '../helpers/amqp-engine'
 
 const createSmsListenerServiceFromEnv = (): SmsListenerService => createSmsListenerService(
-	getEnv('AMQP_URI', { trim: true, fallback: 'amqp://<user>:<password>@localhost:<port>' }),
-	getEnv('AMQP_EXCHANGE',{ trim: true, fallback: 'gdi-about-me-person-changed' }),
-	getEnv('SMS_QUEUE',{ trim: true, fallback: 'sms-queue' }),
-	getEnv('SMS_FILTER',{ trim: true, fallback: 'phone.changed' }),
-	new AmqpEngine()
+	getEnv('AMQP_URI', { trim: true }),
+	getEnv('AMQP_EXCHANGE',{ trim: true }),
+	getEnv('SMS_QUEUE',{ trim: true }),
+	getEnv('SMS_FILTER',{ trim: true }),
+	createAmqpEngine()
 )
 
 const createSmsListenerService = (uri: string, exchange: string, queue: string, filter: string, engine: MqEngine, infinite = true): SmsListenerService  => ({
