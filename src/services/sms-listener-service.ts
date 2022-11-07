@@ -29,14 +29,14 @@ const createSmsListenerService = (uri: string, exchange: string, queue: string, 
 		await engine.assertExchange(exchange)
 
 		// Queue creation/verification
-		console.log(`Asserting durable queue (${queue})...`)
+		console.debug(`Asserting durable queue (${queue})...`)
 		await engine.assertQueue(queue)
 
 		// Queue binding
-		console.log('Binding queue...')
+		console.debug('Binding queue...')
 		await engine.bindQueue(queue, exchange, filter)
 		
-		console.log('waiting for messages. Ctrl-C to exit...')	
+		console.debug('waiting for messages. Ctrl-C to exit...')	
 
 		// Define message processor
 		const messageProcessor = async (message: MqMessageEnvelope) => {
