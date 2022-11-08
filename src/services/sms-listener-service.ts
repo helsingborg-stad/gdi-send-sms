@@ -3,15 +3,23 @@ import { SmsListenerService, MqMessageEnvelope, MqEngine } from '../types'
 import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { createAmqpEngine } from '../helpers/amqp-engine'
 
-const createSmsListenerServiceFromEnv = (): SmsListenerService => createSmsListenerService(
-	getEnv('AMQP_URI', { trim: true }),
-	getEnv('AMQP_EXCHANGE',{ trim: true }),
-	getEnv('SMS_QUEUE',{ trim: true }),
-	getEnv('SMS_FILTER',{ trim: true }),
-	createAmqpEngine()
+const createSmsListenerServiceFromEnv = (): SmsListenerService => createSmsListenerService({
+	uri: getEnv('AMQP_URI', { trim: true }),
+	exchange: getEnv('AMQP_EXCHANGE',{ trim: true }),
+	queue: getEnv('AMQP_QUEUE',{ trim: true }),
+	filter: getEnv('AMQP_FILTER',{ trim: true }),
+},
+createAmqpEngine()
 )
 
-const createSmsListenerService = (uri: string, exchange: string, queue: string, filter: string, engine: MqEngine, infinite = true): SmsListenerService  => ({
+type SmsListenerServiceParams = {
+	uri: string;
+	exchange: string;
+	queue: string;
+	filter: string;
+}
+
+const createSmsListenerService = ({ uri, exchange, queue, filter }: SmsListenerServiceParams, engine: MqEngine, infinite = true): SmsListenerService  => ({
 	listen: async (handler) => {
 		// Connection setup (Assign graceful close on Ctrl+C)
 		console.debug(`Connecting to ${uri}...`)
@@ -40,26 +48,23 @@ const createSmsListenerService = (uri: string, exchange: string, queue: string, 
 
 		// Define message processor
 		const messageProcessor = async (message: MqMessageEnvelope) => {
-			console.debug(`got message with routingkey = ${message?.fields?.routingKey}\r\n${message.content.toString()}\r\n`)
-				
+			console.debug(`Got message with routingkey = ${message?.fields?.routingKey}\r\n${message.content.toString()}\r\n`)
+
 			try {
-				await handler(JSON.parse(message.content.toString()))	
+				await handler(JSON.parse(message.content.toString()))
 			}
 			catch(error) {
 				console.debug(`Failed to send message (${error})`)
 			}
 			finally {
-				engine.ack(message)	
+				await engine.ack(message).catch(() => console.debug('Failed to ack message'))
 			}
 		}
 		// Message loop (Breaks on CTRL+C)
+		let didFail = false
 		do {
-			try {
-				await engine.consume(queue, messageProcessor)
-			} catch {
-				break
-			}			
-		} while (infinite)
+			await engine.consume(queue, messageProcessor).catch(() => didFail = true)
+		} while (infinite && !didFail)
 	},
 })
 

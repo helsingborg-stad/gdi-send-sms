@@ -36,5 +36,5 @@ export interface MqEngine {
 	assertExchange?: (exchange: string) => Promise<void>;
 	assertQueue?: (name: string) => Promise<void>;
 	bindQueue?: (queue: string, exchange: string, filter: string) => Promise<void>;
-	consume?: (queue: string, handler: (message: MqMessageEnvelope) => void) => Promise<void>;
+	consume?: (queue: string, handler: (message: MqMessageEnvelope) => Promise<void>) => Promise<void>;
 }

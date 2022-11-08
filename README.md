@@ -1,5 +1,7 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+
 <a name="readme-top"></a>
+
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -7,8 +9,6 @@
 *** Don't forget to give the project a star!
 *** Thanks again! Now go create something AMAZING! :D
 -->
-
-
 
 <!-- PROJECT SHIELDS -->
 <!--
@@ -18,6 +18,7 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 [![MIT License][license-shield]][license-url]
 
 <p>
@@ -25,18 +26,15 @@
     <img src="docs/images/hbg-github-logo-combo.png" alt="Logo" width="300">
   </a>
 </p>
-<h1>GDI Template</h1>
+<h1>GDI SMS service</h1>
 <p>
-  Template repository for GDI services.
   <br />
   <a href="https://github.com/helsingborg-stad/gdi-template/issues">Report Bug</a>
   ·
   <a href="https://github.com/helsingborg-stad/gdi-template/issues">Request Feature</a>
 </p>
 
-
-
-# 
+#
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -58,22 +56,23 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
-This is a project template for GDI server applications.
-As such, it includes
-- a microframework based on [koa](https://koajs.com/), [openapi-backend](https://github.com/anttiviljami/openapi-backend), [koa2-swagger-ui](https://github.com/scttcper/koa2-swagger-ui) and more
-- best practices such as OpenAPI/Swagger
-- GraphQL support
-- Great testability
+This project is providing SMS capabilities to the GDI infrastructure. The current usecase is to provide a confirmation SMS to
+a customer changing his/her phone number on the Mypages section of the web.
+
+There are three services provided by the project:
+
+- A listener service that subscribes to a RabbitMQ queue.
+- An SMS content service that formats the messages to be sent
+- An SMS send service that pushes the message to an external SMS proxy for delivery
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 ```sh
@@ -86,14 +85,48 @@ yarn test
 # run tests and report coverage
 yarn coverage
 
-# start web server
+# start queue listener daemon
 yarn start
-
-# start server on port 400 instead of default 3000
-PORT=4000 yarn start
 
 # start with debugging output
 DEBUG=* yarn start
+
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Configure service
+
+The service is configured through standard .env file
+
+```sh
+AMQP_URI=<The fully qualified uri of the AMPQ exchange>
+AMQP_EXCHANGE=<The name of the AMPQ broker>
+AMQP_QUEUE=<The name of the queue to receive messages from>
+AMQP_FILTER=<The routing key to receive messages for>
+SMS_BASEPATH=<The fully qualified URL of the web page that verifies the change>
+SMS_PROXY_URL=<The fully qualified URL of the SMS proxy service>
+SMS_PROXY_KEY=<The API key to use for the SMS proxy service>
+```
+
+## Local environment with docker
+
+Start a dockerized RabitMQ with
+
+```sh
+docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 888:15672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management
+```
+
+Ensure `.env` contains
+
+```env
+AMQP_URI=amqp://user:password@localhost:5672
+AMQP_EXCHANGE=gdi-about-me-person-changed
+AMQP_QUEUE=sms-queue
+AMQP_FILTER=phone.changed
+SMS_BASEPATH=https://helsingborg.se/verify
+SMS_PROXY_URL=<Secret, provided by devops>
+SMS_PROXY_KEY=<Secret, provided by devops>
 
 ```
 
@@ -106,18 +139,8 @@ DEBUG=* yarn start
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -133,27 +156,24 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
-* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+- [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [license-shield]: https://img.shields.io/github/license/helsingborg-stad/gdi-template.svg?style=for-the-badge
 [license-url]: https://github.com/helsingborg-stad/gdi-template/blob/master/LICENSE.txt
