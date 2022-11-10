@@ -2,7 +2,7 @@
 import { MqEngine } from '../types'
 import { createSmsListenerService } from '../services/sms-listener-service'
 
-const emptyHandler = async (): Promise<void> => {
+const emptyHandler = async () => {
 	return
 }
 

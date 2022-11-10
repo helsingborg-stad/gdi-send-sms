@@ -4,12 +4,12 @@ import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { v4 as uuidv4 } from 'uuid'
 
 const createSmsSendServiceFromEnv = (): SmsSendService => createSmsSendService(
-	getEnv('SMS_PROXY_URL', { trim: true }),
-	getEnv('SMS_PROXY_KEY', { trim: true })
+	getEnv('SMS_PROXY_URL'),
+	getEnv('SMS_PROXY_KEY')
 )
 
 const createSmsSendService = (smsProxyUrl: string, smsProxyKey: string): SmsSendService => ({
-	send: async ({ to, content }) => {
+	send: async ({ receiver, message }) => {
 		const body = {
 			jsonapi: {
 				version: '1.0',
@@ -18,8 +18,8 @@ const createSmsSendService = (smsProxyUrl: string, smsProxyKey: string): SmsSend
 				type: 'sms',
 				id: uuidv4(),
 				attributes: {
-					receiver: to,
-					message: content,
+					receiver,
+					message,
 				},
 			},
 		}

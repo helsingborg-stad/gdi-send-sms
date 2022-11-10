@@ -4,13 +4,11 @@ import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { createAmqpEngine } from '../helpers/amqp-engine'
 
 const createSmsListenerServiceFromEnv = (): SmsListenerService => createSmsListenerService({
-	uri: getEnv('AMQP_URI', { trim: true }),
-	exchange: getEnv('AMQP_EXCHANGE',{ trim: true }),
-	queue: getEnv('AMQP_QUEUE',{ trim: true }),
-	filter: getEnv('AMQP_FILTER',{ trim: true }),
-},
-createAmqpEngine()
-)
+	uri: getEnv('AMQP_URI'),
+	exchange: getEnv('AMQP_EXCHANGE'),
+	queue: getEnv('AMQP_QUEUE'),
+	filter: getEnv('AMQP_FILTER'),
+}, createAmqpEngine())
 
 type SmsListenerServiceParams = {
 	uri: string;
@@ -47,7 +45,7 @@ const createSmsListenerService = ({ uri, exchange, queue, filter }: SmsListenerS
 		console.debug('waiting for messages. Ctrl-C to exit...')	
 
 		// Define message processor
-		const messageProcessor = async (message: MqMessageEnvelope) => {
+		const messageProcessor = async (message: MqMessageEnvelope) => { 
 			console.debug(`Got message with routingkey = ${message?.fields?.routingKey}\r\n${message.content.toString()}\r\n`)
 
 			try {

@@ -7,7 +7,7 @@ För att verifiera att det är ditt nummer, vänligen bekräfta genom
 att klicka på denna länk: ${smsBasePath}/${verificationCode}`
 
 const createSmsContentServiceFromEnv = (): SmsContentService => createSmsContentService(
-	getEnv('SMS_BASEPATH', { trim: true })
+	getEnv('SMS_BASEPATH')
 )
 
 const createSmsContentService = (smsBasePath: string): SmsContentService  => ({

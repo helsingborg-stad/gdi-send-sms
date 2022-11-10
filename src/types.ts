@@ -4,7 +4,7 @@ export interface Services {
     smsSendService: SmsSendService,
 }
 export interface SmsSendService {
-    send: ({ to, content } : SmsMessage) => Promise<void>
+    send: ({ receiver, message } : SmsMessage) => Promise<void>
 }
 export interface SmsContentService {
     build: (message: MqMessageBody) => Promise<string>
@@ -14,8 +14,8 @@ export interface SmsListenerService {
     listen: (handler: (message: MqMessageBody) => Promise<void> ) => Promise<void>
 }
 export interface SmsMessage {
-    to: string;
-    content: string;
+    receiver: string;
+    message: string;
 }
 export interface MqMessageBody {
     number: string;
