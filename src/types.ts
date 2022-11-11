@@ -1,16 +1,16 @@
 export interface Services {
-    smsListenerService: SmsListenerService,
-    smsContentService: SmsContentService,
-    smsSendService: SmsSendService,
+    listenerService: ListenerService,
+    contentService: ContentService,
+    sendService: SendService,
 }
-export interface SmsSendService {
+export interface SendService {
     send: ({ receiver, message } : SmsMessage) => Promise<void>
 }
-export interface SmsContentService {
+export interface ContentService {
     build: (message: MqMessageBody) => Promise<string>
 }
 
-export interface SmsListenerService {
+export interface ListenerService {
     listen: (handler: (message: MqMessageBody) => Promise<void> ) => Promise<void>
 }
 export interface SmsMessage {
@@ -25,7 +25,12 @@ export interface MqMessageBody {
 }
 export interface MqMessageEnvelope {
     content: Buffer;
-    fields: any;
+    fields: {
+        routingKey: string;
+        deliveryTag: number;
+        redelivered: boolean;
+        exchange: string;
+    };
     properties: any;
 }
 export interface MqEngine {

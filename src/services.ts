@@ -1,12 +1,12 @@
-import { createSmsContentServiceFromEnv } from './services/sms-content-service'
-import { createSmsListenerServiceFromEnv } from './services/sms-listener-service'
-import { createSmsSendServiceFromEnv } from './services/sms-send-service'
+import { getContentServiceFromEnv } from './services/content-service'
+import { getListenerServiceFromEnv } from './services/listener-service'
+import { getSendServiceFromEnv } from './services/send-service'
 import { Services } from './types'
 
 const createServicesFromEnv = (): Services => ({
-	smsListenerService: createSmsListenerServiceFromEnv(),
-	smsContentService: createSmsContentServiceFromEnv(),
-	smsSendService: createSmsSendServiceFromEnv(),
+	listenerService: getListenerServiceFromEnv(),
+	contentService: getContentServiceFromEnv(),
+	sendService: getSendServiceFromEnv(),
 })
 
 export { createServicesFromEnv }

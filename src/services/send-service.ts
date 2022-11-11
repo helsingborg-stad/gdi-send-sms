@@ -1,14 +1,14 @@
-import { SmsSendService } from '../types'
+import { SendService } from '../types'
 import * as superagent from 'superagent'
 import { getEnv } from '@helsingborg-stad/gdi-api-node'
 import { v4 as uuidv4 } from 'uuid'
 
-const createSmsSendServiceFromEnv = (): SmsSendService => createSmsSendService(
+const getSendServiceFromEnv = (): SendService => getSendService(
 	getEnv('SMS_PROXY_URL'),
 	getEnv('SMS_PROXY_KEY')
 )
 
-const createSmsSendService = (smsProxyUrl: string, smsProxyKey: string): SmsSendService => ({
+const getSendService = (smsProxyUrl: string, smsProxyKey: string): SendService => ({
 	send: async ({ receiver, message }) => {
 		const body = {
 			jsonapi: {
@@ -31,4 +31,4 @@ const createSmsSendService = (smsProxyUrl: string, smsProxyKey: string): SmsSend
 	},
 })
 
-export { createSmsSendService, createSmsSendServiceFromEnv }
+export { getSendService, getSendServiceFromEnv }

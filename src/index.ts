@@ -3,9 +3,9 @@ import { Services } from './types'
 const services: Services = createServicesFromEnv()
 
 /** Start daemon */
-services.smsListenerService.listen(async message => await services.smsSendService.send({
+services.listenerService.listen(async message => await services.sendService.send({
 	receiver: message.number,
-	message: await services.smsContentService.build(message),
+	message: await services.contentService.build(message),
 })).catch(err => {
 	console.error(err)
 	process.exit(1)
