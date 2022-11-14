@@ -12,7 +12,7 @@ enum STATUS {
 	NACK_CALLED,
 }
 
-const testParams = { uri: '<host>', exchange: '<exchange>', queue: '<queue>', filter: '<filter>' }
+const testParams = { uri: '<host>', exchange: '<exchange>', queue: '<queue>', topic: '<filter>' }
 
 it('should throw on an unrecoverable connection issue', async () => {
 	const engine: MqEngine = ({
