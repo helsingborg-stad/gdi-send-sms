@@ -6,6 +6,12 @@ const emptyHandler = async () => {
 	return
 }
 
+enum STATUS {
+	EMPTY,
+	ACK_CALLED,
+	NACK_CALLED,
+}
+
 const testParams = { uri: '<host>', exchange: '<exchange>', queue: '<queue>', filter: '<filter>' }
 
 it('should throw on an unrecoverable connection issue', async () => {
@@ -54,7 +60,7 @@ it('should throw on an unrecoverable bind queue issue', async () => {
 })
 
 describe('should call ack after successful send', () => {
-	let success: boolean
+	let status: STATUS = STATUS.EMPTY
 
 	const engine: MqEngine = ({
 		connect: async () => Promise.resolve(),
@@ -81,18 +87,17 @@ describe('should call ack after successful send', () => {
 			})
 					
 		},
-		ack: async () => { success = true },
+		ack: async () => { status = STATUS.ACK_CALLED },
+		nack: async () => { status = STATUS.NACK_CALLED },
 	})
 
 	it('should call ack after SUCCESSFUL send', async () => {
-		success = false
 		await getListenerService(testParams, engine, emptyHandler, false).listen(emptyHandler)
-		expect(success).toBeTruthy()
+		expect(status).toBe(STATUS.ACK_CALLED)
 	})
 
-	it('should call ack after FAILURE to send', async () => {
-		success = false
+	it('should call nack after FAILURE to send', async () => {
 		await getListenerService(testParams, engine, emptyHandler, false).listen(async () => { throw Error('FailToSend') })
-		expect(success).toBeTruthy()
+		expect(status).toBe(STATUS.NACK_CALLED)
 	})
 })

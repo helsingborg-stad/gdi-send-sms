@@ -17,7 +17,12 @@ const createAmqpEngine = (): MqEngine => {
 			await channel.assertExchange(exchange, 'topic')
 		},
 		async assertQueue(name: string): Promise<void> {
-			await channel.assertQueue(name)
+			await channel.assertQueue(name, {
+				arguments: {
+					'x-queue-type': 'quorum',
+					'x-delivery-limit': 5,
+				},
+			})
 		},
 		async bindQueue(queue: string, exchange: string, filter: string): Promise<void> {
 			await channel.bindQueue(queue, exchange, filter)
@@ -30,6 +35,9 @@ const createAmqpEngine = (): MqEngine => {
 		},
 		async ack(message: MqMessageEnvelope): Promise<void> {
 			channel.ack(message)
+		},
+		async nack(message: MqMessageEnvelope): Promise<void> {
+			channel.nack(message, false, true)
 		},
 	}
 }

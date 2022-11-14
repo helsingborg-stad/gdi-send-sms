@@ -41,22 +41,15 @@ const getListenerService = ({ uri, exchange, queue, filter }: ListenerServicePar
 		debug('waiting for messages. Ctrl-C to exit...')	
 
 		// Message loop (Breaks on CTRL+C)
-		let didFail = false
-		do {
-			await engine.consume(queue, async (message: MqMessageEnvelope) => { 
-				debug(message.content.toString())
+		await engine.consume(queue, async (message: MqMessageEnvelope) => { 
+			debug(message.content.toString())
 	
-				try {
-					await handler(JSON.parse(message.content.toString()))
-				}
-				catch(error) {
-					debug(`Failed to send message (${error})`)
-				}
-				finally {
-					await engine.ack(message).catch(() => debug('Failed to ack message'))
-				}
-			}).catch(() => didFail = true)
-		} while (infinite && !didFail)
+			await handler(JSON.parse(message.content.toString())).then(() => {
+				engine.ack(message)
+			}).catch(() => {
+				engine.nack(message)
+			})
+		})
 	},
 })
 

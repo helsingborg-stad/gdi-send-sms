@@ -37,6 +37,7 @@ export interface MqEngine {
 	connect?: (uri: string) => Promise<void>;
 	close?: () => Promise<void>;
     ack?: (message: MqMessageEnvelope) => Promise<void>;
+    nack?: (message: MqMessageEnvelope) => Promise<void>;
     createChannel?: () => Promise<void>;
 	assertExchange?: (exchange: string) => Promise<void>;
 	assertQueue?: (name: string) => Promise<void>;

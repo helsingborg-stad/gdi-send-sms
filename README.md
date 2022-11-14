@@ -63,6 +63,8 @@
 This project is providing SMS capabilities to the GDI infrastructure. The current usecase is to provide a confirmation SMS to
 a customer changing his/her phone number on the Mypages section of the web.
 
+The service will retry sending a failed message 5 times before discarding it.
+
 There are three services provided by the project:
 
 - A listener service that subscribes to a RabbitMQ queue.
