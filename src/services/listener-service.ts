@@ -17,7 +17,7 @@ const getListenerServiceFromEnv = (): ListenerService => getListenerService({
 	topic: getEnv('AMQP_FILTER'),
 }, createAmqpEngine())
 
-const getListenerService = ({ uri, exchange, queue, topic }: ListenerServiceParams, engine: MqEngine, debug: (data: string) => void = console.debug, infinite = true): ListenerService  => ({
+const getListenerService = ({ uri, exchange, queue, topic }: ListenerServiceParams, engine: MqEngine, debug: (data: string) => void = console.debug): ListenerService  => ({
 	listen: async (handler) => {
 		debug(`Connecting to ${uri}...`)
 		await engine.connect(uri)

@@ -18,7 +18,7 @@ it('should throw on an unrecoverable connection issue', async () => {
 	const engine: MqEngine = ({
 		connect: async () => { throw Error('Connect') },
 	})
-	await expect(getListenerService(testParams, engine, emptyHandler, false).listen(emptyHandler)).rejects.toThrowError('Connect')
+	await expect(getListenerService(testParams, engine, emptyHandler).listen(emptyHandler)).rejects.toThrowError('Connect')
 })
 
 it('should throw on an unrecoverable channel creation issue', async () => {
@@ -26,7 +26,7 @@ it('should throw on an unrecoverable channel creation issue', async () => {
 		connect: async () => Promise.resolve(),
 		createChannel: async () => { throw Error('CreateChannel')},
 	})
-	await expect(getListenerService(testParams, engine, emptyHandler, false).listen(emptyHandler)).rejects.toThrowError('CreateChannel')
+	await expect(getListenerService(testParams, engine, emptyHandler).listen(emptyHandler)).rejects.toThrowError('CreateChannel')
 })
 
 it('should throw on an unrecoverable assert exchange issue', async () => {
@@ -35,7 +35,7 @@ it('should throw on an unrecoverable assert exchange issue', async () => {
 		createChannel: async () => Promise.resolve(),
 		assertExchange: async ()  => { throw Error('AssertExchange')},
 	})
-	await expect(getListenerService(testParams, engine, emptyHandler, false).listen(emptyHandler)).rejects.toThrowError('AssertExchange')
+	await expect(getListenerService(testParams, engine, emptyHandler).listen(emptyHandler)).rejects.toThrowError('AssertExchange')
 })
 
 it('should throw on an unrecoverable assert queue issue', async () => {
@@ -45,7 +45,7 @@ it('should throw on an unrecoverable assert queue issue', async () => {
 		assertExchange: async ()  => Promise.resolve(),
 		assertQueue: async () => { throw Error('AssertQueue') },
 	})
-	await expect(getListenerService(testParams, engine, emptyHandler, false).listen(emptyHandler)).rejects.toThrowError('AssertQueue')
+	await expect(getListenerService(testParams, engine, emptyHandler).listen(emptyHandler)).rejects.toThrowError('AssertQueue')
 })
 
 it('should throw on an unrecoverable bind queue issue', async () => {
@@ -56,7 +56,7 @@ it('should throw on an unrecoverable bind queue issue', async () => {
 		assertQueue: async () => Promise.resolve(),
 		bindQueue: async () => { throw Error('BindQueue') },
 	})
-	await expect(getListenerService(testParams, engine, emptyHandler, false).listen(emptyHandler)).rejects.toThrowError('BindQueue')
+	await expect(getListenerService(testParams, engine, emptyHandler).listen(emptyHandler)).rejects.toThrowError('BindQueue')
 })
 
 describe('should call ack after successful send', () => {
@@ -92,12 +92,12 @@ describe('should call ack after successful send', () => {
 	})
 
 	it('should call ack after SUCCESSFUL send', async () => {
-		await getListenerService(testParams, engine, emptyHandler, false).listen(emptyHandler)
+		await getListenerService(testParams, engine, emptyHandler).listen(emptyHandler)
 		expect(status).toBe(STATUS.ACK_CALLED)
 	})
 
 	it('should call nack after FAILURE to send', async () => {
-		await getListenerService(testParams, engine, emptyHandler, false).listen(async () => { throw Error('FailToSend') })
+		await getListenerService(testParams, engine, emptyHandler).listen(async () => { throw Error('FailToSend') })
 		expect(status).toBe(STATUS.NACK_CALLED)
 	})
 })
