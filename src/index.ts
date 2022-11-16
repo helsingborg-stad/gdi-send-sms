@@ -2,7 +2,7 @@ import { createServicesFromEnv } from './services'
 import { Services } from './types'
 const services: Services = createServicesFromEnv()
 
-/** Start daemon */
+// Start daemon
 services.listenerService.listen(async message => await services.sendService.send({
 	receiver: message.number,
 	message: await services.contentService.build(message),

@@ -19,31 +19,29 @@ const getListenerServiceFromEnv = (): ListenerService => getListenerService({
 
 const getListenerService = ({ uri, exchange, queue, topic }: ListenerServiceParams, engine: MqEngine, debug: (data: string) => void = console.debug): ListenerService  => ({
 	listen: async (handler) => {
-		debug(`Connecting to ${uri}...`)
-		await engine.connect(uri)
-
+		debug(`Connecting to ('${uri}')...`)
+		await engine.connect(uri).then(() => process.once('SIGINT', async () => {
+			debug('Perfoming graceful exit...')
+			await engine.close()
+		}))
 		debug('Creating channel...')
 		await engine.createChannel()
 
-		debug(`Asserting durable topic exchange (${exchange}) ...`)
+		debug(`Asserting durable topic exchange ('${exchange}') ...`)
 		await engine.assertExchange(exchange)
 
-		debug(`Asserting durable queue (${queue})...`)
+		debug(`Asserting durable queue ('${queue}')...`)
 		await engine.assertQueue(queue)
 
-		debug(`Binding queue with topic (${topic})...`)
+		debug(`Binding queue with topic ('${topic}')...`)
 		await engine.bindQueue(queue, exchange, topic)
 	
-		process.once('SIGINT', async () => {
-			await engine.close()
-		})
-
-		debug('waiting for messages. Ctrl-C to exit...')	
+		debug('Waiting for messages. Ctrl-C to exit...')
 
 		await engine.consume(queue, async (message: MqMessageEnvelope) => { 
 			debug(message.content.toString())
 	
-			await handler(JSON.parse(message.content.toString())).then(() => {
+			handler(JSON.parse(message.content.toString())).then(() => {
 				engine.ack(message)
 			}).catch(() => {
 				engine.nack(message)
@@ -53,4 +51,3 @@ const getListenerService = ({ uri, exchange, queue, topic }: ListenerServicePara
 })
 
 export { getListenerServiceFromEnv, getListenerService }
-
