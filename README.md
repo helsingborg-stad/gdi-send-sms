@@ -71,6 +71,26 @@ There are three services provided by the project:
 - An SMS content service that formats the messages to be sent
 - An SMS send service that pushes the message to an external SMS proxy for delivery
 
+```mermaid
+sequenceDiagram
+    autonumber
+    participant MessageQueue
+    participant ListenerService
+    participant ContentService
+    participant SendService
+
+    MessageQueue->>+ListenerService: Event triggered
+    ListenerService->>+ContentService: Build content
+    ContentService-->>-ListenerService: Formatted content
+    ListenerService->>+SendService: Send SMS message
+    SendService-->>-ListenerService: Return
+    alt Send successful
+      ListenerService-->>MessageQueue: Acknowledge
+    else Send failed
+      ListenerService-->>-MessageQueue: Negative acknowledge
+    end
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
