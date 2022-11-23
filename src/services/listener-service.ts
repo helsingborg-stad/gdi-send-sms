@@ -38,16 +38,21 @@ const getListenerService = ({ uri, exchange, queue, topic }: ListenerServicePara
 	
 		debug('Waiting for messages. Ctrl-C to exit...')
 
-		await engine.consume(queue, async (message: MqMessageEnvelope) => { 
-			debug(message.content.toString())
-	
-			handler(JSON.parse(message.content.toString())).then(() => {
+		await engine.consume(queue, async (message: MqMessageEnvelope) => { 			
+			const payload = JSON.parse(message.content.toString())
+			
+			debug(`${getId(message)} Message RECEIVED, Number: ('${payload.number}')`)
+
+			handler(payload).then(() => {
 				engine.ack(message)
-			}).catch(() => {
+				debug(`${getId(message)} Message send SUCCEEDED`)
+			}).catch((error) => {
 				engine.nack(message)
+				debug(`${getId(message)} Message send FAILED with status ('${error.status}')`)
 			})
 		})
 	},
 })
+const getId = (message: MqMessageEnvelope): string => `${message.fields.deliveryTag}/${Number(message.fields.redelivered)}`
 
 export { getListenerServiceFromEnv, getListenerService }
