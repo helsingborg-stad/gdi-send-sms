@@ -15,17 +15,12 @@ export interface SmsService {
 }
 
 /**
- * Handler for missing providers
- */
-const missingProvider = (): SmsSendProvider => { throw Error('Missing Email provider') }
-
-/**
  * Service instantiation from environment configuration
  * @returns An SmsService instance
  */
 export const getSmsServiceFromEnv = (): SmsService => {
 	return {
-		send: tryCreateHelsingborgFromEnv() || missingProvider(),
+		send: tryCreateHelsingborgFromEnv() || createDefaultSmsProvider(),
 	}
 }
 

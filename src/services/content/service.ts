@@ -15,17 +15,12 @@ export interface ContentService {
 }
 
 /**
- * Handler for missing providers
- */
-const missingProvider = (): ContentBuildProvider => { throw Error('Missing Email provider') }
-
-/**
  * Service instantiation from environment configuration
  * @returns An ContentService instance
  */
 export const getContentServiceFromEnv = (): ContentService => {
 	return {
-		build: tryCreateHelsingborgFromEnv() || missingProvider(),
+		build: tryCreateHelsingborgFromEnv() || createDefaultContentProvider(''),
 	}
 }
 
