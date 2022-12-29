@@ -1,8 +1,12 @@
 import { SmsSendProvider } from '../service'
 
 /**
- * Default action prints the message to console
+ * Example provider. Prints the message to console
  * @returns An SmsSendProvider instance
  */
-export const createDefaultSmsProvider = (): SmsSendProvider => async ({ receiver, message }) => { console.log (`To: ${receiver}\nMessage: ${message}`) }
+export const createDefaultSmsProvider = (): SmsSendProvider => async ({ receiver, message }) => { console.log ([
+	`To: ${receiver}`,
+	`Message: ${message}`,
+].join('\n'))
+}
 	

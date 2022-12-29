@@ -1,7 +1,7 @@
 import { ContentBuildProvider } from '../service'
 
 /**
- * Default action prints the message to console
- * @returns An SmsSendProvider instance
+ * Example content provider
+ * @returns A ContentBuildProvider instance
  */
 export const createDefaultContentProvider = (basePath: string): ContentBuildProvider => async (message) => `(Default) ${basePath}${message.verificationCode}`

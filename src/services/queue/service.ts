@@ -19,7 +19,6 @@ export interface QueueService {
   */
 const missingProvider = (): QueueListenProvider => { throw Error('Missing Queue provider') }
 
- 
 /**
  * Service instantiation from environment configuration
  * @returns A QueueService instance

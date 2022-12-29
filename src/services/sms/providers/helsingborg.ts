@@ -8,6 +8,21 @@ export interface SmsSendParams {
 	proxyKey: string;
 }
 
+/**
+ * Helsingborgs stad sms provider
+ * @returns An SmsSendProvider instance
+ */
+export const tryCreateHelsingborgFromEnv = (): SmsSendProvider => {
+	if (getEnv('SMS_PROVIDER', { fallback: '' }) !== 'helsingborg') {
+		return null
+	}
+	const params = {
+		proxyUrl: getEnv('SMS_PROXY_URL'),
+		proxyKey: getEnv('SMS_PROXY_KEY'),
+	}
+	return async ({ receiver, message }) => send(params, receiver, message)
+}
+
 const send = async (params: SmsSendParams, receiver: string, message: string): Promise<void> => {
 	const body = {
 		jsonapi: {
@@ -27,16 +42,4 @@ const send = async (params: SmsSendParams, receiver: string, message: string): P
 		.send(body)
 		.set('X-API-Key', params.proxyKey)
 		.set('accept', 'json')
-}
-
-
-export const tryCreateHelsingborgFromEnv = (): SmsSendProvider => {
-	if (getEnv('SMS_PROVIDER', { fallback: '' }) !== 'helsingborg') {
-		return null
-	}
-	const params = {
-		proxyUrl: getEnv('SMS_PROXY_URL'),
-		proxyKey: getEnv('SMS_PROXY_KEY'),
-	}
-	return async ({ receiver, message }) => send(params, receiver, message)
 }
