@@ -6,5 +6,5 @@ it('returns a templated string with an injected verificationcode', async () => {
 		verificationCode: 'dcd77d41-c1fa-4d90-851a-4d5f03d0183a',
 		isVerified: false,
 		verifiedDate: null,
-	})).toEqual('(Default) <base_path>dcd77d41-c1fa-4d90-851a-4d5f03d0183a')
+	})).toEqual('<base_path>dcd77d41-c1fa-4d90-851a-4d5f03d0183a')
 })

@@ -4,4 +4,4 @@ import { ContentBuildProvider } from '../service'
  * Example content provider
  * @returns A ContentBuildProvider instance
  */
-export const createDefaultContentProvider = (basePath: string): ContentBuildProvider => async (message) => `(Default) ${basePath}${message.verificationCode}`
+export const createDefaultContentProvider = (verificationPath: string): ContentBuildProvider => async (message) => `${verificationPath}${message.verificationCode}`

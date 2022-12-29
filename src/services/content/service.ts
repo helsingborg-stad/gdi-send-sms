@@ -20,7 +20,7 @@ export interface ContentService {
  */
 export const getContentServiceFromEnv = (): ContentService => {
 	return {
-		build: tryCreateHelsingborgFromEnv() || createDefaultContentProvider(''),
+		build: tryCreateHelsingborgFromEnv() || createDefaultContentProvider('http://example.com/'),
 	}
 }
 
@@ -28,4 +28,4 @@ export const getContentServiceFromEnv = (): ContentService => {
  * Static execution of Service
  * @returns An ContentService instance
  */
-export const getContentService = (basePath: string): ContentService => ({ build: createDefaultContentProvider(basePath) })
+export const getContentService = (verificationPath: string): ContentService => ({ build: createDefaultContentProvider(verificationPath) })
