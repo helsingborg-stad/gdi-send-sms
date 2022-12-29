@@ -121,15 +121,9 @@ DEBUG=* yarn start
 
 The service is configured through standard .env file
 
-```sh
-AMQP_URI=<The fully qualified uri of the AMPQ exchange>
-AMQP_EXCHANGE=<The name of the AMPQ broker>
-AMQP_QUEUE=<The name of the queue to receive messages from>
-AMQP_FILTER=<The routing key to receive messages for>
-SMS_BASEPATH=<The fully qualified URL of the web page that verifies the change>
-SMS_PROXY_URL=<The fully qualified URL of the SMS proxy service>
-SMS_PROXY_KEY=<The API key to use for the SMS proxy service>
-```
+- [Content provider](src/services/content/README.MD)
+- [SMS send provider](src/services/sms/README.MD)
+- [SMS queue provider](src/services/queue/README.MD)
 
 ## Local environment with docker
 
@@ -142,14 +136,16 @@ docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 888:15672 
 Ensure `.env` contains
 
 ```env
+QUEUE_PROVIDER=amqp
 AMQP_URI=amqp://user:password@localhost:5672
 AMQP_EXCHANGE=gdi-about-me-person-changed
 AMQP_QUEUE=sms-queue
 AMQP_FILTER=phone.changed
-SMS_BASEPATH=https://helsingborg.se/verify
+CONTENT_PROVIDER=helsingborg
+CONTENT_VERIFICATION_PATH=https://helsingborg.se/verify?tel=
+SMS_PROVIDER=helsingborg
 SMS_PROXY_URL=<Secret, provided by devops>
 SMS_PROXY_KEY=<Secret, provided by devops>
-
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

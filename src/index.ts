@@ -3,7 +3,7 @@ import { Services } from './types'
 const services: Services = createServicesFromEnv()
 
 // Start daemon
-services.listenerService.listen(async message => await services.sendService.send({
+services.queueService.listen(async message => await services.smsService.send({
 	receiver: message.number,
 	message: await services.contentService.build(message),
 })).catch(err => {
